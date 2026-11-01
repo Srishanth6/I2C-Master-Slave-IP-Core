@@ -1,7 +1,17 @@
-﻿SUMMARY tb_i2c_core: 8/8 tests PASS, 55 checks, 0 errors
-RESULT: ALL TESTS PASSED
-SUMMARY tb_i2c_arb: 3/3 tests PASS, 17 checks, 0 errors
-RESULT: ALL TESTS PASSED
-SUMMARY tb_i2c_apb: 4/4 tests PASS, 19 checks, 0 errors
-RESULT: ALL TESTS PASSED
+﻿tb_i2c_core: SUMMARY tb_i2c_core: 8/8 tests PASS, 56 checks, 0 errors
+tb_i2c_core: RESULT: ALL TESTS PASSED
+tb_i2c_arb: SUMMARY tb_i2c_arb: 3/3 tests PASS, 18 checks, 0 errors
+tb_i2c_arb: RESULT: ALL TESTS PASSED
+tb_i2c_apb: SUMMARY tb_i2c_apb: 4/4 tests PASS, 20 checks, 0 errors
+tb_i2c_apb: RESULT: ALL TESTS PASSED
+tb_i2c_timing: SUMMARY tb_i2c_timing: 4/4 tests PASS, 20 checks, 0 errors
+tb_i2c_timing: RESULT: ALL TESTS PASSED
+tb_i2c_robust: SUMMARY tb_i2c_robust: 6/6 tests PASS, 24 checks, 0 errors
+tb_i2c_robust: RESULT: ALL TESTS PASSED
+tb_i2c_rand_seed1: SUMMARY tb_i2c_rand: 1/1 tests PASS, 1009 checks, 0 errors
+tb_i2c_rand_seed1: RESULT: ALL TESTS PASSED
+tb_i2c_rand_seed2: SUMMARY tb_i2c_rand: 1/1 tests PASS, 984 checks, 0 errors
+tb_i2c_rand_seed2: RESULT: ALL TESTS PASSED
+tb_i2c_rand_seed3: SUMMARY tb_i2c_rand: 1/1 tests PASS, 1003 checks, 0 errors
+tb_i2c_rand_seed3: RESULT: ALL TESTS PASSED
 NEGATIVE TEST: injected bug detected by testbench ... PASS

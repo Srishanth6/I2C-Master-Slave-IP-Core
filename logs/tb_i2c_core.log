@@ -23,10 +23,11 @@ TEST 6: 10-bit NACK: wrong low address byte ... PASS
 TEST 7: clock stretching by slave (600 clk = 12 us)
   longest SCL low time 12060.0 ns (normal low = 5000 ns)
 TEST 7: clock stretching by slave (600 clk = 12 us) ... PASS
-TEST 8: 400 kHz fast mode (prescale=30)
-  SCL period min 2540.0 ns max 2600.0 ns -> 393.70 kHz
-TEST 8: 400 kHz fast mode (prescale=30) ... PASS
+TEST 8: Fast-mode 370 kHz (prescale=32)
+  SCL period min 2700.0 ns max 2760.0 ns -> 370.37 kHz
+TEST 8: Fast-mode 370 kHz (prescale=32) ... PASS
+  protocol monitor: 14 START, 4 Sr, 10 STOP, 428 bits, 0 assertion failures
 --------------------------------------------------
-SUMMARY tb_i2c_core: 8/8 tests PASS, 55 checks, 0 errors
+SUMMARY tb_i2c_core: 8/8 tests PASS, 56 checks, 0 errors
 RESULT: ALL TESTS PASSED
-tb\tb_i2c_core.v:188: $finish called at 3677730000 (1ps)
+tb\tb_i2c_core.v:191: $finish called at 3817290000 (1ps)

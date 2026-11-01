@@ -1,51 +1,52 @@
 ﻿TEST 1: 7-bit write, 4 bytes, 100 kHz
-  [FAIL] reg[2]=A5  (t=563851 ns)
-  [FAIL] reg[3]=3C  (t=563852 ns)
-  [FAIL] reg[4]=7E  (t=563853 ns)
-  [FAIL] reg[5]=81  (t=563854 ns)
+  [FAIL] reg[2]=A5  (t=576351 ns)
+  [FAIL] reg[3]=3C  (t=576352 ns)
+  [FAIL] reg[4]=7E  (t=576353 ns)
+  [FAIL] reg[5]=81  (t=576354 ns)
   SCL period min 10060.0 ns max 10120.0 ns -> 99.40 kHz
 TEST 1: 7-bit write, 4 bytes, 100 kHz ... FAIL
 TEST 2: 7-bit read, repeated START, ACK/NACK
   read byte 0 = a4 (expected a5)
-  [FAIL] read data  (t=946310 ns)
+  [FAIL] read data  (t=968810 ns)
   read byte 1 = 3d (expected 3c)
-  [FAIL] read data  (t=1036910 ns)
+  [FAIL] read data  (t=1059410 ns)
   read byte 2 = 7f (expected 7e)
-  [FAIL] read data  (t=1127510 ns)
+  [FAIL] read data  (t=1150010 ns)
   read byte 3 = 80 (expected 81)
-  [FAIL] read data  (t=1228170 ns)
+  [FAIL] read data  (t=1258170 ns)
 TEST 2: 7-bit read, repeated START, ACK/NACK ... FAIL
 TEST 3: NACK: no slave at address 0x58
   rx_nack = 1 (expected 1)
 TEST 3: NACK: no slave at address 0x58 ... PASS
 TEST 4: 10-bit write to 0x2A5
-  [FAIL] s10 reg[5]=11  (t=1811951 ns)
-  [FAIL] s10 reg[6]=22  (t=1811952 ns)
-  [FAIL] 7-bit slave untouched  (t=1811953 ns)
+  [FAIL] s10 reg[5]=11  (t=1866951 ns)
+  [FAIL] s10 reg[6]=22  (t=1866952 ns)
+  [FAIL] 7-bit slave untouched  (t=1866953 ns)
 TEST 4: 10-bit write to 0x2A5 ... FAIL
 TEST 5: 10-bit read with repeated START
   read 10 (expected 11)
-  [FAIL] rd 11  (t=2285010 ns)
+  [FAIL] rd 11  (t=2350010 ns)
   read 23 (expected 22)
-  [FAIL] rd 22  (t=2385670 ns)
+  [FAIL] rd 22  (t=2458170 ns)
 TEST 5: 10-bit read with repeated START ... FAIL
 TEST 6: 10-bit NACK: wrong low address byte
   rx_nack = 1 (expected 1)
 TEST 6: 10-bit NACK: wrong low address byte ... PASS
 TEST 7: clock stretching by slave (600 clk = 12 us)
   longest SCL low time 12060.0 ns (normal low = 5000 ns)
-  [FAIL] reg[8]=C3  (t=2997511 ns)
-  [FAIL] reg[9]=D4  (t=2997512 ns)
-  [FAIL] read back under stretching  (t=3411030 ns)
+  [FAIL] reg[8]=C3  (t=3095011 ns)
+  [FAIL] reg[9]=D4  (t=3095012 ns)
+  [FAIL] read back under stretching  (t=3526030 ns)
 TEST 7: clock stretching by slave (600 clk = 12 us) ... FAIL
-TEST 8: 400 kHz fast mode (prescale=30)
-  SCL period min 2540.0 ns max 2600.0 ns -> 393.70 kHz
-  [FAIL] rd 0F  (t=3627350 ns)
-  [FAIL] rd 1E  (t=3650270 ns)
-  [FAIL] rd 2D  (t=3675730 ns)
-TEST 8: 400 kHz fast mode (prescale=30) ... FAIL
+TEST 8: Fast-mode 370 kHz (prescale=32)
+  SCL period min 2700.0 ns max 2760.0 ns -> 370.37 kHz
+  [FAIL] rd 0F  (t=3761890 ns)
+  [FAIL] rd 1E  (t=3786250 ns)
+  [FAIL] rd 2D  (t=3815290 ns)
+TEST 8: Fast-mode 370 kHz (prescale=32) ... FAIL
+  protocol monitor: 14 START, 4 Sr, 10 STOP, 428 bits, 0 assertion failures
 --------------------------------------------------
-SUMMARY tb_i2c_core: 2/8 tests PASS, 55 checks, 19 errors
+SUMMARY tb_i2c_core: 2/8 tests PASS, 56 checks, 19 errors
 RESULT: FAILED
-tb\tb_i2c_core.v:188: $finish called at 3677730000 (1ps)
+tb\tb_i2c_core.v:191: $finish called at 3817290000 (1ps)
 NEGATIVE TEST: injected bug detected by testbench ... PASS

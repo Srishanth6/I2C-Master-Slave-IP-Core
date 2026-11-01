@@ -1,0 +1,8 @@
+﻿TEST 1: 150 random transactions, seed=2
+  57 writes, 75 reads, 18 NACK probes, 444 data bytes, 43 to 10-bit slave, 44 with stretching
+  protocol monitor: 225 START, 75 Sr, 150 STOP, 7821 bits, 0 assertion failures
+TEST 1: 150 random transactions, seed=-392144044 ... PASS
+--------------------------------------------------
+SUMMARY tb_i2c_rand: 1/1 tests PASS, 984 checks, 0 errors
+RESULT: ALL TESTS PASSED
+tb\tb_i2c_rand.v:105: $finish called at 45356610000 (1ps)

@@ -1,0 +1,29 @@
+﻿VCD info: dumpfile waves/tb_i2c_robust.vcd opened for output.
+TEST 1: command while busy is rejected (cmd_err)
+  after CMD: busy=1 cmd_ready=0
+  second CMD while busy: cmd_err=1 irq=1
+TEST 1: command while busy is rejected (cmd_err) ... PASS
+TEST 2: invalid commands rejected, bus untouched
+  CMD=READ|WRITE    -> cmd_err=1 busy=0
+  CMD=RECOVER|START -> cmd_err=1 busy=0
+TEST 2: invalid commands rejected, bus untouched ... PASS
+TEST 3: software flow with cmd_ready polling
+  reg[4..6] = 10 11 12 (expected 10 11 12)
+TEST 3: software flow with cmd_ready polling ... PASS
+TEST 4: reset during read -> SDA stuck low -> RECOVER
+  master reset in the middle of the data byte at 424250 ns
+  after reset: SCL=1 SDA=0 slave addressed=1
+  after RECOVER: SCL=1 SDA=1 bus_busy=0 slave addressed=0
+TEST 4: reset during read -> SDA stuck low -> RECOVER ... PASS
+TEST 5: SCL held low by slave -> timeout -> RECOVER
+  STATUS = 2d8: timeout=1 busy=0 at 773050 ns
+TEST 5: SCL held low by slave -> timeout -> RECOVER ... PASS
+TEST 6: protocol assertion self-test (illegal SDA edge)
+  [ASSERT bus] P1/P3 START inside a byte (t=1308911 ns)
+  monitor flagged 1 violation(s) (expected 1)
+TEST 6: protocol assertion self-test (illegal SDA edge) ... PASS
+  protocol monitor: 10 START, 2 Sr, 5 STOP, 202 bits, 0 assertion failures
+--------------------------------------------------
+SUMMARY tb_i2c_robust: 6/6 tests PASS, 24 checks, 0 errors
+RESULT: ALL TESTS PASSED
+tb\tb_i2c_robust.v:170: $finish called at 1321911000 (1ps)

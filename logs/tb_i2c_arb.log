@@ -1,7 +1,7 @@
 ﻿VCD info: dumpfile waves/tb_i2c_arb.vcd opened for output.
 TEST 1: simultaneous START, A sends 0xA0 (0x50+W), B sends 0x90 (0x48+W)
-  master A done at 9090 ns, arb_lost=1
-  master B done at 25570 ns, arb_lost=0, rx_nack=0
+  master A done at 10330 ns, arb_lost=1
+  master B done at 26810 ns, arb_lost=0, rx_nack=0
 TEST 1: arbitration lost detected, winner completes ... PASS
 TEST 2: losing master retries after STOP
 TEST 2: retry after arbitration loss ... PASS
@@ -9,7 +9,8 @@ TEST 3: same address, arbitration on data byte (A=0x33, B=0x31)
   data-phase: A arb_lost=1, B arb_lost=0
   s50 reg[3] = 31 (expected 31)
 TEST 3: arbitration in data phase ... PASS
+  protocol monitor: 3 START, 0 Sr, 3 STOP, 93 bits, 0 assertion failures
 --------------------------------------------------
-SUMMARY tb_i2c_arb: 3/3 tests PASS, 17 checks, 0 errors
+SUMMARY tb_i2c_arb: 3/3 tests PASS, 18 checks, 0 errors
 RESULT: ALL TESTS PASSED
-tb\tb_i2c_arb.v:112: $finish called at 246971000 (1ps)
+tb\tb_i2c_arb.v:115: $finish called at 256271000 (1ps)
