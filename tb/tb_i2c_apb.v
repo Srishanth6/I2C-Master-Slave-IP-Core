@@ -22,6 +22,7 @@ module tb_i2c_apb;
 
     localparam CTRL=8'h00, PRESC=8'h04, TXD=8'h08, RXD=8'h0C, CMD=8'h10, STAT=8'h14;
     localparam C_START=1, C_STOP=2, C_READ=4, C_WRITE=8, C_NACK=16;
+    i2c_monitor #(.NAME("bus")) mon (.scl(scl), .sda(sda), .en(presetn), .chk_mode(2'd0));
     integer errors = 0, checks = 0, tp = 0, tf = 0, e0;
     reg [7:0] test_id = 0; reg [31:0] r;
 
@@ -56,14 +57,14 @@ module tb_i2c_apb;
 
         test_id = 1; e0 = errors; $display("TEST 1: register reset values and read/write");
         apb_r(PRESC, r); $display("  PRESCALE reset = %0d (expected 124)", r); check(r == 124, "PRESCALE reset");
-        apb_r(STAT, r);  check(r == 0, "STATUS reset = 0");
-        apb_w(PRESC, 32'd30); apb_r(PRESC, r); check(r == 30, "PRESCALE rw");
+        apb_r(STAT, r);  $display("  STATUS reset = %03h (expected 340: cmd_ready, SCL=1, SDA=1)", r); check(r == 32'h340, "STATUS reset value");
+        apb_w(PRESC, 32'd32); apb_r(PRESC, r); check(r == 32, "PRESCALE rw");
         apb_w(TXD, 32'h5A);   apb_r(TXD, r);   check(r == 32'h5A, "TXDATA rw");
         apb_w(CTRL, 32'h1);   apb_r(CTRL, r);  check(r == 1, "CTRL rw");
         check(pready == 1 && pslverr == 0, "PREADY=1, PSLVERR=0");
         fin("APB register access");
 
-        test_id = 2; e0 = errors; $display("TEST 2: APB-driven 7-bit write (400 kHz, slave stretching)");
+        test_id = 2; e0 = errors; $display("TEST 2: APB-driven 7-bit write (Fast-mode 370 kHz, slave stretching)");
         i2c_op(C_START|C_WRITE, 8'hA0); check(r[1] == 0, "addr ACK");
         check(irq == 1, "irq raised on done (irq_en=1)");
         i2c_op(C_WRITE, 8'h00);          check(r[1] == 0, "ptr ACK");
@@ -86,6 +87,8 @@ module tb_i2c_apb;
         i2c_op(C_START|C_WRITE, 8'hE0); $display("  STATUS = %05b (bit1 rx_nack)", r[4:0]); check(r[1] == 1, "STATUS.rx_nack=1");
         i2c_op(C_STOP, 0);
         fin("NACK status");
+        check(mon.errors == 0, "protocol monitor: no assertion failures");
+        $display("  protocol monitor: %0d START, %0d Sr, %0d STOP, %0d bits, %0d assertion failures", mon.starts, mon.rstarts, mon.stops, mon.bits, mon.errors);
 
         $display("--------------------------------------------------");
         $display("SUMMARY tb_i2c_apb: %0d/%0d tests PASS, %0d checks, %0d errors", tp, tp+tf, checks, errors);

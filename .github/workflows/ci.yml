@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  simulate:
+    name: Icarus Verilog regression
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Icarus Verilog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+          iverilog -V 2>&1 | head -n 1
+      - name: Compile and run all testbenches
+        run: |
+          SEEDS="1 2 3 $GITHUB_RUN_NUMBER"
+          bash scripts/run_all.sh $SEEDS
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sim-logs
+          path: logs/

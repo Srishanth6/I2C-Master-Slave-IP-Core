@@ -30,6 +30,7 @@ module tb_i2c_core;
         .stretch_en(1'b0), .stretch_cycles(16'd0), .scl_i(scl), .sda_i(sda),
         .scl_oe(s10_scl_oe), .sda_oe(s10_sda_oe), .addressed(), .wr_strobe(), .dbg_addr(dbg10), .dbg_data(d10));
 
+    i2c_monitor #(.NAME("bus")) mon (.scl(scl), .sda(sda), .en(rst_n), .chk_mode(2'd0));
     integer errors = 0, checks = 0, tests_pass = 0, tests_fail = 0, test_err0;
     reg [8*48-1:0] tname;
     // ---- for the waveform: test number visible in GTKWave
@@ -99,7 +100,7 @@ module tb_i2c_core;
         dbg7 = 4; #1 check(d7 == 8'h7E, "reg[4]=7E");
         dbg7 = 5; #1 check(d7 == 8'h81, "reg[5]=81");
         $display("  SCL period min %0.1f ns max %0.1f ns -> %0.2f kHz", period_min, period_max, 1e6/period_min);
-        check(1e6/period_min > 95.0 && 1e6/period_max < 101.0, "SCL ~100 kHz");
+        check(period_min == 10060.0, "SCL = 50 MHz/(4*125+3) = 99.40 kHz");
         check(!bus_busy, "bus free after STOP");
         end_test;
 
@@ -170,16 +171,18 @@ module tb_i2c_core;
         end_test;
 
         // ---------------------------------------------------------------
-        begin_test(8, "400 kHz fast mode (prescale=30)");
-        prescale = 16'd30; reset_meas;
+        begin_test(8, "Fast-mode 370 kHz (prescale=32)");
+        prescale = 16'd32; reset_meas;
         wr7(7'h50, 8'h0C, 3, {24'h0F1E2D, 104'd0});
         $display("  SCL period min %0.1f ns max %0.1f ns -> %0.2f kHz", period_min, period_max, 1e6/period_min);
-        check(1e6/period_min < 410.0 && 1e6/period_max > 380.0, "SCL ~400 kHz");
+        check(period_min == 2700.0, "SCL = 50 MHz/(4*33+3) = 370.37 kHz");
         cmd(1,0,0,1,0,8'hA0); cmd(0,0,0,1,0,8'h0C); cmd(1,0,0,1,0,8'hA1);
         cmd(0,0,1,0,0,0); check(rx_data == 8'h0F, "rd 0F");
         cmd(0,0,1,0,0,0); check(rx_data == 8'h1E, "rd 1E");
         cmd(0,1,1,0,1,0); check(rx_data == 8'h2D, "rd 2D");
         end_test;
+        check(mon.errors == 0, "protocol monitor: no assertion failures");
+        $display("  protocol monitor: %0d START, %0d Sr, %0d STOP, %0d bits, %0d assertion failures", mon.starts, mon.rstarts, mon.stops, mon.bits, mon.errors);
 
         $display("--------------------------------------------------");
         $display("SUMMARY tb_i2c_core: %0d/%0d tests PASS, %0d checks, %0d errors",

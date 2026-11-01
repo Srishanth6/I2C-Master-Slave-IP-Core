@@ -31,6 +31,7 @@ module tb_i2c_arb;
         .stretch_cycles(16'd0), .scl_i(scl), .sda_i(sda), .scl_oe(s2_scl), .sda_oe(s2_sda),
         .addressed(), .wr_strobe(), .dbg_addr(dbg), .dbg_data(d48));
 
+    i2c_monitor #(.NAME("bus")) mon (.scl(scl), .sda(sda), .en(rst_n), .chk_mode(2'd0));
     integer errors = 0, checks = 0, tp = 0, tf = 0, e0;
     reg [7:0] test_id = 0;
     task check(input c, input [8*64-1:0] m);
@@ -105,6 +106,8 @@ module tb_i2c_arb;
         repeat (10) @(posedge clk);
         dbg = 3; #1 $display("  s50 reg[3] = %02h (expected 31)", d50); check(d50 == 8'h31, "winner data written");
         fin("arbitration in data phase");
+        check(mon.errors == 0, "protocol monitor: no assertion failures");
+        $display("  protocol monitor: %0d START, %0d Sr, %0d STOP, %0d bits, %0d assertion failures", mon.starts, mon.rstarts, mon.stops, mon.bits, mon.errors);
 
         $display("--------------------------------------------------");
         $display("SUMMARY tb_i2c_arb: %0d/%0d tests PASS, %0d checks, %0d errors", tp, tp+tf, checks, errors);

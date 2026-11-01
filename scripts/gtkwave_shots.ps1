@@ -11,7 +11,9 @@ public class W { [DllImport("user32.dll")] public static extern bool ShowWindow(
 New-Item -ItemType Directory -Force waveforms | Out-Null
 $views = @{ "core_write"="tb_i2c_core"; "core_rstart"="tb_i2c_core"; "core_nack"="tb_i2c_core";
             "core_10bit"="tb_i2c_core"; "core_stretch"="tb_i2c_core"; "core_400k"="tb_i2c_core";
-            "arb_lost"="tb_i2c_arb"; "apb_write"="tb_i2c_apb" }
+            "arb_lost"="tb_i2c_arb"; "apb_write"="tb_i2c_apb";
+            "busy_reject"="tb_i2c_robust"; "reset_midxfer"="tb_i2c_robust"; "bus_recovery"="tb_i2c_robust";
+            "timeout"="tb_i2c_robust"; "timing_fast"="tb_i2c_timing" }
 if ($args.Count) { $sel = $args } else { $sel = $views.Keys }
 foreach ($v in $sel) {
     $vcd = "waves\$($views[$v]).vcd"

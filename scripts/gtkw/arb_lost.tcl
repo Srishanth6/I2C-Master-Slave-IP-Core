@@ -4,4 +4,4 @@ gtkwave::/Edit/UnHighlight_All
 gtkwave::setZoomRangeTimes 190000 30000000
 gtkwave::setFromEntry 190ns
 gtkwave::setToEntry 30000ns
-gtkwave::setMarker 9090000
+gtkwave::setMarker 10330000

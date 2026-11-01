@@ -1,2 +1,3 @@
 build/
 waves/*.vcd
+logs/*.compile.log
