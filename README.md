@@ -116,17 +116,69 @@ captured by `scripts/gtkwave_shots.ps1`. Each view has a GTKWave Tcl script in `
 (signals, zoom and marker), so it can be reopened with
 `gtkwave -S scripts\gtkw\<view>.tcl waves\<tb>.vcd`.
 
-| View | Description |
-|---|---|
-| ![core_write](docs/screenshots/gtkwave_core_write.png) | T1 – 7-bit write of 2 bytes at 100 kHz (START, address 0xA0, ACK, data, STOP) |
-| ![core_rstart](docs/screenshots/gtkwave_core_rstart.png) | Repeated-START random read |
-| ![core_nack](docs/screenshots/gtkwave_core_nack.png) | Address NACK from a non-existent slave |
-| ![core_10bit](docs/screenshots/gtkwave_core_10bit.png) | 10-bit address write and read |
-| ![core_stretch](docs/screenshots/gtkwave_core_stretch.png) | Slave clock stretching (SCL low extended to 12.06 us) |
-| ![core_400k](docs/screenshots/gtkwave_core_400k.png) | Fast-mode transfer (prescale 30, 393.7 kHz) |
-| ![arb_lost](docs/screenshots/gtkwave_arb_lost.png) | Multi-master arbitration: master A loses at 9090 ns, B completes |
-| ![apb_write](docs/screenshots/gtkwave_apb_write.png) | APB register-driven write sequence |
+### 1. T1 – 7-bit write at 100 kHz
 
+![T1 – 7-bit write at 100 kHz](waveforms/gtkwave_core_write.png)
+
+*Figure W1: T1 – 7-bit write at 100 kHz — `waves/tb_i2c_core.vcd`, window 0–200 µs.*
+
+Master sends START, address byte 0xA0 (0x50 + W), register pointer 0x02 and data 0xA5. `u_m.bitn` counts bits 0–8; on the 9th clock `u_s7.sda_oe` pulls SDA low (ACK). `u_s7.addressed` rises after the address matches.
+
+### 2. T2 – Repeated-START random read
+
+![T2 – Repeated-START random read](waveforms/gtkwave_core_rstart.png)
+
+*Figure W2: T2 – Repeated-START random read — `waves/tb_i2c_core.vcd`, window 700–960 µs.*
+
+After writing the pointer, the master issues a repeated START (`u_m.st` 01) and sends 0xA1 (read). The slave loads `rsh` with 0xA5 from register 2 and shifts it out; `u_m.rx_data` shows 0xA5 and `u_s7.ptr` auto-increments 2→3→4.
+
+### 3. T3 – Address NACK
+
+![T3 – Address NACK](waveforms/gtkwave_core_nack.png)
+
+*Figure W3: T3 – Address NACK — `waves/tb_i2c_core.vcd`, window 1228–1340 µs.*
+
+Address 0xB0 (0x58) has no slave, so no device drives SDA on the 9th clock. `u_m.rx_nack` goes high, `done` pulses and the master sends STOP; `bus_busy` drops.
+
+### 4. T4 – 10-bit addressing
+
+![T4 – 10-bit addressing](waveforms/gtkwave_core_10bit.png)
+
+*Figure W4: T4 – 10-bit addressing — `waves/tb_i2c_core.vcd`, window 1339–1540 µs.*
+
+Master sends the 10-bit header 0xF4 (11110 + A9:A8) then 0xA5 (A7:A0). The 10-bit slave `u_s10` ACKs both bytes, sets `matched10` and `addressed`, and the 7-bit slave stays idle.
+
+### 5. T7 – Slave clock stretching
+
+![T7 – Slave clock stretching](waveforms/gtkwave_core_stretch.png)
+
+*Figure W5: T7 – Slave clock stretching — `waves/tb_i2c_core.vcd`, window 2587–2900 µs.*
+
+After each ACK the slave holds SCL low (`u_s7.scl_oe`) while `scnt` counts. The master's `cnt` is frozen until SCL really goes high, so the low phase stretches to 12.06 µs (normal 5 µs) and no data is lost.
+
+### 6. T8 – Fast mode (400 kHz class)
+
+![T8 – Fast mode (400 kHz class)](waveforms/gtkwave_core_400k.png)
+
+*Figure W6: T8 – Fast mode (400 kHz class) — `waves/tb_i2c_core.vcd`, window 3411–3500 µs.*
+
+`u_m.prescale` = 0x1E (30) gives SCL = clk/(4·31) = 393.7 kHz measured. Bytes 0x0C, 0x0F, 0x1E are written back-to-back with ACKs.
+
+### 7. Multi-master arbitration
+
+![Multi-master arbitration](waveforms/gtkwave_arb_lost.png)
+
+*Figure W7: Multi-master arbitration — `waves/tb_i2c_arb.vcd`, window 0–30 µs.*
+
+Masters A (0xA0) and B (0x90) start together; SDA is the wired-AND of both. At the first bit where A sends 1 and B sends 0, A sees SDA low, releases the bus and goes idle (`m_a.st` 00, marker 9090 ns, `arb_lost`). B continues uncorrupted and addresses slave 0x48 (`s48.addressed`).
+
+### 8. APB register-driven transfer
+
+![APB register-driven transfer](waveforms/gtkwave_apb_write.png)
+
+*Figure W8: APB register-driven transfer — `waves/tb_i2c_apb.vcd`, window 0.4–101 µs.*
+
+Software writes TXDATA and CMD (pwdata 0x09 = START+WRITE, 0x08 = WRITE, 0x0A = WRITE+STOP) at paddr 0x10 and polls STATUS (0x14). Each byte sets `done`, which raises `irq`; the slave ACKs and stores 0xDE, 0xAD.
 
 ## Synthesis (Yosys 0.52, generic gates)
 
@@ -142,7 +194,7 @@ captured by `scripts/gtkwave_shots.ps1`. Each view has a GTKWave Tcl script in `
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\run_all.ps1       # all testbenches + negative test -> logs\
-powershell -ExecutionPolicy Bypass -File scripts\gtkwave_shots.ps1 # GTKWave screenshots -> docs\screenshots\
+powershell -ExecutionPolicy Bypass -File scripts\gtkwave_shots.ps1 # GTKWave screenshots -> waveforms\
 C:\iverilog\gtkwave\bin\gtkwave.exe -S scripts\gtkw\arb_lost.tcl waves\tb_i2c_arb.vcd
 yosys -s syn/synth.ys                                               # optional, synthesis
 ```
@@ -157,7 +209,8 @@ tb/       tb_i2c_core.v, tb_i2c_arb.v, tb_i2c_apb.v (self-checking)
 scripts/  run_all.ps1, gtkwave_shots.ps1, gtkw/*.tcl (GTKWave views)
 logs/     simulation logs, summary.log, synth_*.log
 waves/    VCDs (regenerated by run_all.ps1, not committed)
-docs/     figs/ (block diagram, FSMs), screenshots/ (GTKWave)
+docs/     figs/ (block diagram, FSM diagrams and .dot sources)
+waveforms/ GTKWave screenshots, one per test view (gtkwave_<view>.png)
 syn/      Yosys script
 report/   report (docx, pdf)
 ```
