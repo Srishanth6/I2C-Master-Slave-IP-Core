@@ -29,7 +29,7 @@ foreach ($t in $tbs) {
 if (Select-String -Quiet "RESULT: FAILED" logs\negative_inject_bug.log) {
     "NEGATIVE TEST: injected bug detected by testbench ... PASS" | Add-Content -Encoding utf8 logs\negative_inject_bug.log
 } else { "NEGATIVE TEST ... FAIL (bug not detected)" | Add-Content -Encoding utf8 logs\negative_inject_bug.log; $fail++ }
-$sum = foreach ($l in $logs) { Select-String "SUMMARY|RESULT" "logs\$l.log" | ForEach-Object { "$($l): $($_.Line)" } }
+$sum = foreach ($l in $logs) { Select-String -CaseSensitive "SUMMARY|RESULT" "logs\$l.log" | ForEach-Object { "$($l): $($_.Line)" } }
 $sum += (Select-String "NEGATIVE TEST" logs\negative_inject_bug.log | ForEach-Object { $_.Line })
 $sum | Set-Content -Encoding utf8 logs\summary.log
 Get-Content logs\summary.log
