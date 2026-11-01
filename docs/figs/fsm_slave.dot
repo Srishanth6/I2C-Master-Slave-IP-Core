@@ -1,0 +1,11 @@
+digraph S { rankdir=LR; node [shape=circle, fontname="Helvetica", style=filled, fillcolor="#e6f4ea", width=1.0]; edge[fontname="Helvetica", fontsize=9];
+ IDLE [shape=doublecircle];
+ IDLE -> ADDR [label="START"]; WAITP -> ADDR [label="Sr"];
+ ADDR -> PTR [label="7-bit match, W / ACK"]; ADDR -> RDATA [label="match, R / ACK"];
+ ADDR -> ADDR2 [label="11110xx0 / ACK"]; ADDR -> WAITP [label="no match / NACK"];
+ ADDR2 -> PTR [label="A[7:0] match / ACK"]; ADDR2 -> WAITP [label="mismatch"];
+ PTR -> WDATA [label="ptr stored / ACK"]; WDATA -> WDATA [label="byte -> mem[ptr++] / ACK"];
+ RDATA -> RDATA [label="master ACK\nmem[ptr++]"]; RDATA -> WAITP [label="master NACK"];
+ PTR -> ADDR [label="Sr"]; WDATA -> ADDR [label="Sr"]; 
+ any [shape=plaintext, style="", label="STOP from any state -> IDLE"];
+}

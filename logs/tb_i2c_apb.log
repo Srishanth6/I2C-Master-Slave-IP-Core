@@ -1,0 +1,17 @@
+﻿VCD info: dumpfile waves/tb_i2c_apb.vcd opened for output.
+TEST 1: register reset values and read/write
+  PRESCALE reset = 124 (expected 124)
+TEST 1: APB register access ... PASS
+TEST 2: APB-driven 7-bit write (400 kHz, slave stretching)
+TEST 2: APB write transfer ... PASS
+TEST 3: APB-driven read with repeated START
+  RXDATA = de (expected de)
+  RXDATA = ad (expected ad)
+TEST 3: APB read transfer ... PASS
+TEST 4: NACK reported in STATUS
+  STATUS = 11010 (bit1 rx_nack)
+TEST 4: NACK status ... PASS
+--------------------------------------------------
+SUMMARY tb_i2c_apb: 4/4 tests PASS, 19 checks, 0 errors
+RESULT: ALL TESTS PASSED
+tb\tb_i2c_apb.v:93: $finish called at 256530000 (1ps)

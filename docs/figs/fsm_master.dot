@@ -1,0 +1,8 @@
+digraph M { rankdir=LR; node [shape=circle, fontname="Helvetica", style=filled, fillcolor="#e8f0fe", width=1.1]; edge[fontname="Helvetica", fontsize=9];
+ IDLE [shape=doublecircle]; 
+ IDLE -> START [label="cmd_valid & START"]; IDLE -> BIT [label="cmd_valid & (WRITE|READ)"]; IDLE -> STOP [label="cmd_valid & STOP only"];
+ START -> BIT [label="ph3 & (WR|RD)"]; START -> STOP [label="ph3 & STOP only"]; START -> IDLE [label="ph3 / done"];
+ BIT -> BIT [label="ph3 & bitn<8\nbitn++"]; BIT -> STOP [label="bit 8 ph3 & STOP"]; BIT -> IDLE [label="bit 8 ph3 / done\nOR arbitration lost"];
+ STOP -> IDLE [label="ph3 / done"];
+ note [shape=note, fillcolor="#fff4e5", label="Each state runs 4 phases of (prescale+1) clks\nph0 SCL low, set SDA | ph1 release SCL, wait SCL=1 (stretch)\nph2 SCL high (sample at end of ph1) | ph3 SCL low"];
+}

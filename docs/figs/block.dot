@@ -1,0 +1,14 @@
+digraph G { rankdir=LR; node [shape=box, style="rounded,filled", fillcolor="#e8f0fe", fontname="Helvetica"]; edge[fontname="Helvetica", fontsize=10];
+ cpu [label="CPU / APB master", fillcolor="#fff4e5"];
+ subgraph cluster_apb { label="i2c_apb"; style=rounded; color="#1a73e8"; fontname="Helvetica";
+   regs [label="Register bank\nCTRL  PRESCALE  TXDATA\nRXDATA  CMD  STATUS"];
+   m [label="i2c_master\nprescaler | 4-phase bit engine\nSTART/Sr/STOP | arbitration\n2-FF synchronisers"]; }
+ bus [label="Open-drain I2C bus\nSCL / SDA + pull-ups\n(wired-AND)", shape=box, fillcolor="#e6f4ea"];
+ s1 [label="i2c_slave (7-bit 0x50)\nregister file 16x8\nclock stretching"];
+ s2 [label="i2c_slave (10-bit 0x2A5)\nregister file 16x8"];
+ m2 [label="2nd master\n(arbitration test)", fillcolor="#fce8e6"];
+ cpu -> regs [label="PADDR/PWDATA\nPRDATA, irq", dir=both];
+ regs -> m [label="cmd, tx_data /\nrx_data, status", dir=both];
+ m -> bus [label="scl_oe, sda_oe /\nscl_i, sda_i", dir=both];
+ bus -> s1 [dir=both]; bus -> s2 [dir=both]; m2 -> bus [dir=both];
+}

@@ -1,0 +1,32 @@
+﻿VCD info: dumpfile waves/tb_i2c_core.vcd opened for output.
+TEST 1: 7-bit write, 4 bytes, 100 kHz
+  SCL period min 10060.0 ns max 10120.0 ns -> 99.40 kHz
+TEST 1: 7-bit write, 4 bytes, 100 kHz ... PASS
+TEST 2: 7-bit read, repeated START, ACK/NACK
+  read byte 0 = a5 (expected a5)
+  read byte 1 = 3c (expected 3c)
+  read byte 2 = 7e (expected 7e)
+  read byte 3 = 81 (expected 81)
+TEST 2: 7-bit read, repeated START, ACK/NACK ... PASS
+TEST 3: NACK: no slave at address 0x58
+  rx_nack = 1 (expected 1)
+TEST 3: NACK: no slave at address 0x58 ... PASS
+TEST 4: 10-bit write to 0x2A5
+TEST 4: 10-bit write to 0x2A5 ... PASS
+TEST 5: 10-bit read with repeated START
+  read 11 (expected 11)
+  read 22 (expected 22)
+TEST 5: 10-bit read with repeated START ... PASS
+TEST 6: 10-bit NACK: wrong low address byte
+  rx_nack = 1 (expected 1)
+TEST 6: 10-bit NACK: wrong low address byte ... PASS
+TEST 7: clock stretching by slave (600 clk = 12 us)
+  longest SCL low time 12060.0 ns (normal low = 5000 ns)
+TEST 7: clock stretching by slave (600 clk = 12 us) ... PASS
+TEST 8: 400 kHz fast mode (prescale=30)
+  SCL period min 2540.0 ns max 2600.0 ns -> 393.70 kHz
+TEST 8: 400 kHz fast mode (prescale=30) ... PASS
+--------------------------------------------------
+SUMMARY tb_i2c_core: 8/8 tests PASS, 55 checks, 0 errors
+RESULT: ALL TESTS PASSED
+tb\tb_i2c_core.v:188: $finish called at 3677730000 (1ps)
