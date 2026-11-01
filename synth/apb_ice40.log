@@ -1,0 +1,22 @@
+
+48. Printing statistics.
+
+=== i2c_apb ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      345 wires
+      781 wire bits
+      345 public wires
+      781 public wire bits
+       15 ports
+       84 port bits
+      433 cells
+        1   $scopeinfo
+       78   SB_CARRY
+      108   SB_DFFER
+        5   SB_DFFES
+        5   SB_DFFR
+        6   SB_DFFS
+      230   SB_LUT4
+

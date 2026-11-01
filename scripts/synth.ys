@@ -1,0 +1,66 @@
+# Yosys synthesis of the I2C IP core. Run from the repo root:
+#   yosys -q -s scripts/synth.ys
+# Writes synth/<top>_{generic,ice40,xilinx}.log (stat output).
+
+# i2c_master: generic
+design -reset
+read_verilog -sv rtl/i2c_master.v rtl/i2c_slave.v rtl/i2c_apb.v
+synth -top i2c_master -flatten
+check -assert
+tee -q -o synth/master_generic.log stat
+
+# i2c_master: ice40
+design -reset
+read_verilog -sv rtl/i2c_master.v rtl/i2c_slave.v rtl/i2c_apb.v
+synth_ice40 -top i2c_master
+check -assert
+tee -q -o synth/master_ice40.log stat
+
+# i2c_master: xilinx
+design -reset
+read_verilog -sv rtl/i2c_master.v rtl/i2c_slave.v rtl/i2c_apb.v
+synth_xilinx -top i2c_master -family xc7
+check -assert
+tee -q -o synth/master_xilinx.log stat
+
+# i2c_slave: generic
+design -reset
+read_verilog -sv rtl/i2c_master.v rtl/i2c_slave.v rtl/i2c_apb.v
+synth -top i2c_slave -flatten
+check -assert
+tee -q -o synth/slave_generic.log stat
+
+# i2c_slave: ice40
+design -reset
+read_verilog -sv rtl/i2c_master.v rtl/i2c_slave.v rtl/i2c_apb.v
+synth_ice40 -top i2c_slave
+check -assert
+tee -q -o synth/slave_ice40.log stat
+
+# i2c_slave: xilinx
+design -reset
+read_verilog -sv rtl/i2c_master.v rtl/i2c_slave.v rtl/i2c_apb.v
+synth_xilinx -top i2c_slave -family xc7
+check -assert
+tee -q -o synth/slave_xilinx.log stat
+
+# i2c_apb: generic
+design -reset
+read_verilog -sv rtl/i2c_master.v rtl/i2c_slave.v rtl/i2c_apb.v
+synth -top i2c_apb -flatten
+check -assert
+tee -q -o synth/apb_generic.log stat
+
+# i2c_apb: ice40
+design -reset
+read_verilog -sv rtl/i2c_master.v rtl/i2c_slave.v rtl/i2c_apb.v
+synth_ice40 -top i2c_apb
+check -assert
+tee -q -o synth/apb_ice40.log stat
+
+# i2c_apb: xilinx
+design -reset
+read_verilog -sv rtl/i2c_master.v rtl/i2c_slave.v rtl/i2c_apb.v
+synth_xilinx -top i2c_apb -family xc7
+check -assert
+tee -q -o synth/apb_xilinx.log stat

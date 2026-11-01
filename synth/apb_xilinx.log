@@ -1,0 +1,83 @@
+
+54. Printing statistics.
+
+=== $paramod\i2c_master\TIMEOUT_CLKS=s32'00000000000100110001001011010000 ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      307 wires
+      619 wire bits
+       21 public wires
+       50 public wire bits
+       21 ports
+       50 port bits
+      258 cells
+       16   CARRY4
+       85   FDCE
+        6   FDPE
+        4   INV
+       23   LUT2
+        8   LUT3
+       45   LUT4
+       19   LUT5
+       52   LUT6
+
+=== i2c_apb ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      135 wires
+      317 wire bits
+       22 public wires
+       98 public wire bits
+       15 ports
+       84 port bits
+      173 cells
+        1   BUFG
+       28   FDCE
+        9   FDPE
+       47   IBUF
+        1   INV
+       13   LUT2
+        6   LUT3
+        9   LUT4
+       11   LUT5
+       11   LUT6
+       37   OBUF
+        1 submodules
+        1   $paramod\i2c_master\TIMEOUT_CLKS=s32'00000000000100110001001011010000
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+      431 i2c_apb
+      258 $paramod\i2c_master\TIMEOUT_CLKS=s32'00000000000100110001001011010000
+
+        +----------Count including submodules.
+        | 
+      442 wires
+      936 wire bits
+       43 public wires
+      148 public wire bits
+       36 ports
+      134 port bits
+        - memories
+        - memory bits
+        - processes
+      431 cells
+        1   BUFG
+       16   CARRY4
+      113   FDCE
+       15   FDPE
+       47   IBUF
+        5   INV
+       36   LUT2
+       14   LUT3
+       54   LUT4
+       30   LUT5
+       63   LUT6
+       37   OBUF
+        1 submodules
+        1   $paramod\i2c_master\TIMEOUT_CLKS=s32'00000000000100110001001011010000
+

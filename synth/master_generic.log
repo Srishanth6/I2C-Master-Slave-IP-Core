@@ -1,0 +1,28 @@
+
+6. Printing statistics.
+
+=== i2c_master ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      519 wires
+      731 wire bits
+       43 public wires
+      133 public wire bits
+       21 ports
+       50 port bits
+      645 cells
+       53   $_ANDNOT_
+      204   $_AND_
+       82   $_DFFE_PN0P_
+        3   $_DFF_PN0_
+        6   $_DFF_PN1_
+       42   $_MUX_
+       57   $_NAND_
+        9   $_NOR_
+       33   $_NOT_
+       37   $_ORNOT_
+       86   $_OR_
+       19   $_XNOR_
+       14   $_XOR_
+
